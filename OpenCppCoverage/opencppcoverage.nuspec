@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Test your packages in a test environment: https://github.com/chocolatey/chocolatey-test-environment -->
+
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <!-- Package information -->
+    <id>opencppcoverage</id>
+    <version>0.9.5.300</version>
+    <packageSourceUrl>https://github.com/RFerraro/OpenCppCoverage-Choco</packageSourceUrl>
+    <owners>Ryan Ferraro</owners>
+
+    <!-- Software information -->
+    <title>OpenCppCoverage</title>
+    <authors>OpenCppCoverage</authors>
+    <projectUrl>https://opencppcoverage.codeplex.com/</projectUrl>
+    <licenseUrl>https://opencppcoverage.codeplex.com/license</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <projectSourceUrl>https://opencppcoverage.codeplex.com/SourceControl/latest</projectSourceUrl>
+    <docsUrl>https://opencppcoverage.codeplex.com/documentation</docsUrl>
+    <mailingListUrl>https://opencppcoverage.codeplex.com/discussions</mailingListUrl>
+    <bugTrackerUrl>https://opencppcoverage.codeplex.com/workitem/list/basic</bugTrackerUrl>
+    <tags>coverage admin SPACE_SEPARATED</tags>
+    <summary>An open source code coverage tool for C++ under Windows.</summary>
+    <description>An open source code coverage tool for C++ under Windows.</description>
+    <releaseNotes>
+      * OpenCppCoverage 64 bit can debug 32 bit and 64 bit programs.
+      * OpenCppCoverage 32 bit can only debug 32 bit programs.
+    </releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
