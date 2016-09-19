@@ -19,7 +19,7 @@
     <docsUrl>https://opencppcoverage.codeplex.com/documentation</docsUrl>
     <mailingListUrl>https://opencppcoverage.codeplex.com/discussions</mailingListUrl>
     <bugTrackerUrl>https://opencppcoverage.codeplex.com/workitem/list/basic</bugTrackerUrl>
-    <tags>codecoverage testing development msvc</tags>
+    <tags>codecoverage testing development msvc admin</tags>
     <summary>An open source code coverage tool for C++ under Windows.</summary>
     <description>An open source code coverage tool for C++ under Windows.</description>
     <releaseNotes>
