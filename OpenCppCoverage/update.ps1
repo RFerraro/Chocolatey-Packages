@@ -1,4 +1,8 @@
-﻿Add-Type -AssemblyName System.Web
+﻿param(
+    [string]$ReleaseName = "latest"
+     )
+
+Add-Type -AssemblyName System.Web
 
 function Split-Items
 {
@@ -18,44 +22,6 @@ function Split-Items
         else
         {
             @{ ($Item.ToLower().Trim()) = '' }
-        }
-    }
-}
-
-function Decode-HtmlString
-{
-    param(
-        [Parameter(ValueFromPipeline=$true)]
-        [string]$String
-        )
-
-    Process
-    {
-        [System.Web.HttpUtility]::HtmlDecode($String)
-    }
-}
-
-function Read-Feed
-{
-    param(
-        [Parameter(ValueFromPipeline=$true)]
-        [string]$Uri
-        )
-    
-    Process
-    {
-        $rssResponse = Invoke-WebRequest $feedUrl
-        Write-Verbose $rssResponse
-
-        $xml = [xml]$rssResponse.Content
-        $latest = $xml.rss.channel.SelectSingleNode('item')
-        if($latest)
-        {
-            @{
-                RssTitle = $latest.title
-                RssUri = $latest.link
-                RssDescription = $latest.description
-            }
         }
     }
 }
@@ -83,40 +49,6 @@ function Parse-ReleasePlatform
     }
 }
 
-function Read-ReleaseUri
-{
-    param(
-        [Parameter(ValueFromPipeline=$true)]
-        [string]$Uri
-        )
-    
-    Process
-    {
-        $response = Invoke-WebRequest $Uri
-        Write-Verbose $response
-
-        $response.Links `
-            | Where {$_.id} `
-            | Where {$_.id.StartsWith('fileDownload')} `
-            | %{@{ ReleaseTitle = $_.innerText; ReleaseLink = $_.href }}
-    }
-}
-
-function Get-DownloadLink
-{
-    param(
-        [Parameter(ValueFromPipeline=$true)]
-        [string]$Uri
-        )
-
-    Process
-    {
-        $request = Invoke-WebRequest $Uri -MaximumRedirection 0 -ErrorAction Ignore
-
-        $request.Links | Where {$_.innerText -eq "here"} | Select -expand href | Decode-HtmlString
-    }
-}
-
 function Get-ReleaseInfo
 {
     param(
@@ -126,57 +58,36 @@ function Get-ReleaseInfo
 
     Process
     {
-        $uri = $ReleaseInfo.ReleaseLink | Get-DownloadLink
+        $downloadUri = $ReleaseInfo.browser_download_url
         
         $tmpfilename=[System.IO.Path]::GetTempFileName()
         $tmpfilename=[System.IO.Path]::ChangeExtension($tmpfilename, '.exe')
         
-        $response = Invoke-WebRequest $Uri -ErrorAction Ignore
+        $response = Invoke-WebRequest $downloadUri -ErrorAction Ignore
 
         if($response.StatusDescription -ne "OK")
         {
             throw "WebRequest failed..."
         }
 
-        [io.file]::WriteAllBytes($tmpfilename,$response.content)
-        $contentDisposition = $response.Headers.'Content-Disposition' -split ';' | Split-Items
+        [io.file]::WriteAllBytes($tmpfilename, $response.content)
 
         $info = (Get-ChildItem $tmpfilename).VersionInfo
         $checksum = checksum -t sha512 -f $tmpfilename
 
-        $platform = Parse-ReleasePlatform $contentDisposition.filename
+        $platform = Parse-ReleasePlatform $ReleaseInfo.name
 
         @{
-            FileName = $contentDisposition.filename
+            FileName = $ReleaseInfo.name
             FileDescription = $info.FileDescription
             FileVersion = $info.FileVersion
             ProductVersion = $info.ProductVersion
             Platform = $platform
-            Uri = $uri
+            Uri = $downloadUri
             Checksum = $checksum
         }
 
         Remove-Item $tmpfilename
-    }
-}
-
-function Remove-HtmlTags
-{
-    param(
-        [Parameter(ValueFromPipeline=$true)]
-        [string]$String
-        )
-
-    Begin
-    {
-        $regex = '<[^>]+>'
-        $newline = '<[bB][rR][^>]+>'
-    }
-
-    Process
-    {
-        $String = $String -replace $newline,[System.Environment]::NewLine
-        $String -replace $regex,''
     }
 }
 
@@ -221,16 +132,21 @@ function Append-PackageVersion
 
 function Get-Latest
 {
-    #RSS
-    $feedUrl = 'https://opencppcoverage.codeplex.com/project/feeds/rss?ProjectRSSFeed=codeplex%3a%2f%2frelease%2fopencppcoverage'
+    $repoInfoUri = 'https://api.github.com/repos/OpenCppCoverage/OpenCppCoverage'
+    $githubRepoInfo = Invoke-RestMethod -Method Get -Uri $repoInfoUri -Header @{ "Accept" = "application/vnd.github.v3+json" }
 
-    $feedInfo = Read-Feed -Uri $feedUrl
+    if($ReleaseName -ne "latest")
+    {
+        $releaseUri = 'https://api.github.com/repos/OpenCppCoverage/OpenCppCoverage/releases/tags/' + $ReleaseName
+    }
+    else
+    {
+        $releaseUri = 'https://api.github.com/repos/OpenCppCoverage/OpenCppCoverage/releases/latest'
+    }
+    
+    $githubReleaseInfo = Invoke-RestMethod -Method Get -Uri $releaseUri -Header @{ "Accept" = "application/vnd.github.v3+json" }
 
-    $releaseNotes =  $feedInfo | %{ $_.RssDescription } | Remove-HtmlTags | Out-String
-
-    $releaseLinks = $feedInfo `
-        | %{ $_.RssUri } `
-        | Read-ReleaseUri `
+    $releaseLinks = $githubReleaseInfo.assets `
         | Get-ReleaseInfo `
         | %{ `
             @{ `
@@ -241,7 +157,7 @@ function Get-Latest
                         Checksum = $_.Checksum
                     } 
              } 
-            }
+           }
 
     if(-Not $releaseLinks.x64)
     {
@@ -266,7 +182,13 @@ function Get-Latest
     $packageVersion = $releaseLinks.x64.ProductVersion | Append-PackageVersion
 
     @{
-        ReleaseNotes = $($releaseNotes | Out-String)
+        ProjectUrl = $githubRepoInfo.html_url
+        LicenseUrl = $githubRepoInfo.html_url + '/blob/master/LICENSE.txt'
+        ProjectSourceUrl = $githubRepoInfo.html_url + "/archive/" + $githubReleaseInfo.tag_name + ".zip"
+        DocsUrl = $githubRepoInfo.html_url + '/wiki'
+        BugTrackerUrl = $githubRepoInfo.html_url + '/issues'
+        
+        ReleaseNotes = $githubReleaseInfo.body
         PackageVersion = $packageVersion
         Uri64 = $releaseLinks.x64.Uri
         Uri32 = $releaseLinks.x86.Uri
@@ -294,6 +216,11 @@ function global:au_GetLatest
 
     @{
         Version = $info.PackageVersion
+        ProjectUrl = $info.ProjectUrl
+        LicenseUrl = $info.LicenseUrl
+        ProjectSourceUrl = $info.ProjectSourceUrl
+        DocsUrl = $info.DocsUrl
+        BugTrackerUrl = $info.BugTrackerUrl
         ReleaseNotes = $info.ReleaseNotes
         Url64 = $info.Uri64
         Url32 = $info.Uri32
@@ -315,5 +242,11 @@ $nuspec.Load("$scriptPath\opencppcoverage.nuspec")
 
 $nuspec.package.metadata.id = $nuspec.package.metadata.id.ToLower()
 $nuspec.package.metadata.releaseNotes = [string]$Latest.ReleaseNotes
+
+$nuspec.package.metadata.projectUrl = [string]$Latest.ProjectUrl
+$nuspec.package.metadata.licenseUrl = [string]$Latest.LicenseUrl
+$nuspec.package.metadata.projectSourceUrl = [string]$Latest.ProjectSourceUrl
+$nuspec.package.metadata.docsUrl = [string]$Latest.DocsUrl
+$nuspec.package.metadata.bugTrackerUrl = [string]$Latest.BugTrackerUrl
 
 $nuspec.Save("$scriptPath\opencppcoverage.nuspec")

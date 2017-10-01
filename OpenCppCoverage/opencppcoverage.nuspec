@@ -5,33 +5,37 @@
   <metadata>
     <!-- Package information -->
     <id>opencppcoverage</id>
-    <version>0.9.5.300</version>
+    <version>0.9.6.0</version>
     <packageSourceUrl>https://github.com/RFerraro/Chocolatey-Packages/tree/master/OpenCppCoverage</packageSourceUrl>
     <owners>Ryan Ferraro</owners>
 
     <!-- Software information -->
     <title>OpenCppCoverage</title>
     <authors>OpenCppCoverage</authors>
-    <projectUrl>https://opencppcoverage.codeplex.com/</projectUrl>
-    <licenseUrl>https://opencppcoverage.codeplex.com/license</licenseUrl>
+    <projectUrl>https://github.com/OpenCppCoverage/OpenCppCoverage</projectUrl>
+    <licenseUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/blob/master/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <projectSourceUrl>https://opencppcoverage.codeplex.com/SourceControl/latest</projectSourceUrl>
-    <docsUrl>https://opencppcoverage.codeplex.com/documentation</docsUrl>
-    <mailingListUrl>https://opencppcoverage.codeplex.com/discussions</mailingListUrl>
-    <bugTrackerUrl>https://opencppcoverage.codeplex.com/workitem/list/basic</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/archive/release-0.9.6.zip</projectSourceUrl>
+    <docsUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/wiki</docsUrl>
+    <bugTrackerUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/issues</bugTrackerUrl>
     <tags>codecoverage testing development msvc admin</tags>
     <summary>An open source code coverage tool for C++ under Windows.</summary>
     <description>An open source code coverage tool for C++ under Windows.</description>
-    <releaseNotes>
-Changelog
----------
-* Fixed an issue with vstest.console.exe during load, unload, and reload of the same dll [(Information)](https://opencppcoverage.codeplex.com/discussions/655271).
+    <releaseNotes>**22/05/2017: This version is not yet compatible with Visual Studio 2017. A fix is under testing and should be available in the upcoming days.**
 
-Notes
--------------
-* OpenCppCoverage 64 bit can debug 32 bit and 64 bit programs.
-* OpenCppCoverage 32 bit can only debug 32 bit programs.
-    </releaseNotes>
+Release Notes
+- OpenCppCoverage 64 bit version can debug 32 bit and 64 bit programs.
+- OpenCppCoverage 32 bit can only debug 32 bits programs.
+
+Changelog:
+- Optimized build is now supported.
+- You can exclude a line based on a regular expression.
+- Cobertura output format is valid against http://cobertura.sourceforge.net/xml/coverage-04.dtd.
+- If the compiler generates a line not visible, this line is excluded from the coverage.
+- /DEBUG:FASTLINK is now supported in Windows 7.
+- Generated HTML files are now W3C compliant.
+- Keep only the last name when using several --input_coverage flags.
+- Override the output if it exists for HTML, cobertura and binary exports.</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

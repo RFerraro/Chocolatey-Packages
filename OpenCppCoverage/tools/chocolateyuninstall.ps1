@@ -2,6 +2,7 @@
 
 $uninstalled = $false
 
+# This is the AppId defined in $(repo)/Build/Installer/Installer-Template.iss
 $uninstallKey = "{74933D3C-7641-4FA4-840E-313A4D076D87}_is1"
 
 $uninstall64Root = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
