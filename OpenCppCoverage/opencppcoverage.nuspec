@@ -26,7 +26,7 @@
 - OpenCppCoverage 32 bit can only debug 32 bit programs.
 
 Changelog:
-- Support executable created by Visual Studio 2017 compiler.</releaseNotes>
+- Support for executables created by the Visual Studio 2017 compiler.</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
