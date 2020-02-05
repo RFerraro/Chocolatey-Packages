@@ -5,7 +5,7 @@
   <metadata>
     <!-- Package information -->
     <id>opencppcoverage</id>
-    <version>0.9.7.0</version>
+    <version>0.9.8.0</version>
     <packageSourceUrl>https://github.com/RFerraro/Chocolatey-Packages/tree/master/OpenCppCoverage</packageSourceUrl>
     <owners>Ryan Ferraro</owners>
 
@@ -15,7 +15,7 @@
     <projectUrl>https://github.com/OpenCppCoverage/OpenCppCoverage</projectUrl>
     <licenseUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/blob/master/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <projectSourceUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/archive/release-0.9.7.0.zip</projectSourceUrl>
+    <projectSourceUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/archive/release-0.9.8.0.zip</projectSourceUrl>
     <docsUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/wiki</docsUrl>
     <bugTrackerUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/issues</bugTrackerUrl>
     <tags>codecoverage testing development msvc admin</tags>
@@ -26,23 +26,9 @@
 
 Changelog:
 ----------
-* Add several optimizations to reduce OpenCppCoverage initialisation time.
-* Migrate sources of OpenCppCoverage to Visual Studio 2017.
-* Third party libraries can be built easily thanks to [vcpkg](https://github.com/Microsoft/vcpkg).
-* Ignore managed modules. For example ``vstest.console.exe`` can load a C++ CLI module that uses an unmanaged C++ module. In this case, the C++ CLI module is ignored.
-* Coverage quality with ``--optimized_build`` is improved.
-* Add ``--substitute_pdb_source_path`` to allow building on one machine and generating the coverage on another one.
-* OpenCppCoverage can run a program in the ``PATH``.
-* Exit codes from coverage injected with ``--input_coverage`` are ignored.
-* HTML export contains the total number of covered and uncovered lines for each module and file.
-* Improve the Cobertura export for Visual Studio Team System.
-* General improvement on messages:
-	* Suggestions are provided for ``--sources`` and ``--modules`` when the coverage is empty.
-	* Add an error message when the DOS command line max size (8191 characters) is reached.
-	* Improve the error message when specifying a folder for Cobertura or binary export.
-	* Improve the error message when OpenCppCoverage cannot find the path of a module.
-	* Check the values of ``--sources``, ``--excluded_sources``, ``--modules``, ``--excluded_modules`` do not contain ``/``, ``.`` or ``..``
-	* On failure, OpenCppCoverage returns exit code 0x9F8C8E5C.
+* Add an export plugin support. See here to use a plugin and here to create a new plugin.
+* Fix Error: handleinformation.cpp:85 Cannot find path for the handle #84
+* Fixed html doctype declarations #71
 </releaseNotes>
   </metadata>
   <files>
