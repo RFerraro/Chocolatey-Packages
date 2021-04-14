@@ -5,7 +5,7 @@
   <metadata>
     <!-- Package information -->
     <id>opencppcoverage</id>
-    <version>0.9.8.0</version>
+    <version>0.9.9.0</version>
     <packageSourceUrl>https://github.com/RFerraro/Chocolatey-Packages/tree/master/OpenCppCoverage</packageSourceUrl>
     <owners>Ryan Ferraro</owners>
 
@@ -15,7 +15,7 @@
     <projectUrl>https://github.com/OpenCppCoverage/OpenCppCoverage</projectUrl>
     <licenseUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/blob/master/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <projectSourceUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/archive/release-0.9.8.0.zip</projectSourceUrl>
+    <projectSourceUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/archive/release-0.9.9.0.zip</projectSourceUrl>
     <docsUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/wiki</docsUrl>
     <bugTrackerUrl>https://github.com/OpenCppCoverage/OpenCppCoverage/issues</bugTrackerUrl>
     <tags>codecoverage testing development msvc admin</tags>
@@ -26,9 +26,15 @@
 
 Changelog:
 ----------
-* Fixed "Error: handleinformation.cpp:85 Cannot find path for the handle" [Issue 84](https://github.com/OpenCppCoverage/OpenCppCoverage/issues/84).
-* Fixed html doctype declarations [Pull Request 71](https://github.com/OpenCppCoverage/OpenCppCoverage/pull/71).
-</releaseNotes>
+* Add version information at the end of the reports. Thanks [@pamrulla](https://github.com/pamrulla) for [Pull Request 87](https://github.com/OpenCppCoverage/OpenCppCoverage/pull/87).
+* Build OpenCppCoverage with Visual Studio 2019.
+* Fix `Error: exists: The device is not ready`. See [Issue 92](https://github.com/OpenCppCoverage/OpenCppCoverage/issues/92).
+* Remove unreachable lines from the coverage. See [Issue 97](https://github.com/OpenCppCoverage/OpenCppCoverage/issues/97).
+* Fix an issue when using a network drive: Thanks [@jkoppenw](https://github.com/jkoppenw) for [Pull Request 115](https://github.com/OpenCppCoverage/OpenCppCoverage/pull/115).
+* Set `timestamp` field for Cobertura reports. See [Issue 109](https://github.com/OpenCppCoverage/OpenCppCoverage/issues/109).
+* Update JQuery to 3.4.1. Thanks [@opidopiopi](https://github.com/opidopiopi) for [Pull Request 116](https://github.com/OpenCppCoverage/OpenCppCoverage/pull/116).
+* Display several FAQ links when some errors occured.
+    </releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
